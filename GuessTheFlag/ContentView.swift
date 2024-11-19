@@ -15,27 +15,54 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.teal, .black], startPoint: .top, endPoint: .bottom)
+            RadialGradient(stops: [
+                .init(color: Color(red: 0.1, green: 0.7, blue: 0.8), location: 0.3),
+                .init(color: Color(red: 0.5, green: 0.4, blue: 0.4), location: 0.3),
+            ], center: .top, startRadius: 200, endRadius: 700)
                 .ignoresSafeArea()
             
-            VStack(spacing: 30){
-                VStack {
-                    Text("Tap the flag of")
-                        .foregroundStyle(.white)
-                        .font(.subheadline.weight(.medium))
-                    Text(countries[correctAnswer])
-                        .foregroundStyle(.white)
-                        .font(.largeTitle.weight(.semibold))
-                }
+            VStack {
                 
-                ForEach(0..<3) { number in
-                    Button {
-                        flagTapped(number)
-                    } label: {
-                        Image(countries[number])
+                Spacer()
+                
+                Text("Guess the Flag")
+                    .font(.largeTitle.bold())
+                    .foregroundStyle(.white)
+                
+                Spacer()
+                
+                VStack(spacing: 20){
+                    VStack {
+                        Text("Tap the flag of")
+                            .foregroundStyle(.secondary)
+                            .font(.subheadline.weight(.medium))
+                        Text(countries[correctAnswer])
+                            .foregroundStyle(.primary)
+                            .font(.largeTitle.weight(.semibold))
                     }
                     
+                    ForEach(0..<3) { number in
+                        Button {
+                            flagTapped(number)
+                        } label: {
+                            Image(countries[number])
+                        }
+                        .shadow(radius: 5)
+                    }
                 }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 40)
+                .background(.ultraThinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .padding()
+                
+                Spacer()
+                
+                Text("Score: ???")
+                    .foregroundStyle(.white)
+                    .font(.title.bold())
+                
+                Spacer()
             }
         }
         .alert(scoreTitle, isPresented: $showingScore) {
