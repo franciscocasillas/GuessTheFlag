@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
     @State private var userScore = 0
+    @State private var turnsPlayed = 0
     
     var body: some View {
         ZStack {
@@ -66,10 +67,19 @@ struct ContentView: View {
                 Spacer()
             }
         }
+        
         .alert(scoreTitle, isPresented: $showingScore) {
-            Button("Continue", action: askQuestion)
+            if turnsPlayed == 8 {
+                Button ("Play again?", action: playAgain)
+            } else {
+                Button("Continue", action: askQuestion)
+            }
         } message: {
-            Text("Your score is \(userScore)")
+            if turnsPlayed == 8 {
+                Text("Your final score is \(userScore).")
+            } else {
+                Text("Your score is \(userScore).")
+            }
         }
     }
     
@@ -83,11 +93,20 @@ struct ContentView: View {
         }
 
         showingScore = true
+        turnsPlayed += 1
     }
     
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+    }
+    
+    func playAgain() {
+        countries.shuffle()
+        correctAnswer = Int.random(in: 0...2)
+        userScore = 0
+        turnsPlayed = 0
+        showingScore = false
     }
 }
 
